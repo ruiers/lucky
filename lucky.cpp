@@ -86,6 +86,14 @@ public:
         back = new ball[da_bet[1]];
     }
 
+    ~bet()
+    {
+        delete[] red;
+        delete[] blue;
+        delete[] front;
+        delete[] back;
+    }
+
     void dc_red()
     {
         num i = 0, j = 0, n = dc_bet[0];
@@ -212,7 +220,6 @@ public:
 
         printf("]\n");
     };
-
 };
 
 int test(int argc, char** argv)
@@ -236,8 +243,10 @@ int test(int argc, char** argv)
     return 0;
 }
 
+#include <mcheck.h>
 int main()
 {
+    mtrace();
     class bet one_bet;
 
     one_bet.dc();

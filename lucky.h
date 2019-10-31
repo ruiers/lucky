@@ -73,6 +73,10 @@ static num back_numbers[] = { 1,  2,  3,  4 , 5,  6,  7,  8,  9, 10,
                               11, 12
                             };
 
+static num cmp(const void *a, const void *b)
+{
+    return *((num *) a) - *((num *) b);
+}
 
 SLIST_HEAD(HEAD, _node) head;
 
