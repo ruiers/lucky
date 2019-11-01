@@ -4,60 +4,6 @@
 #include "sys/time.h"
 #include "lucky.h"
 
-#if 0
-class ball
-{
-public:
-    num value;
-    sty style;
-    str sname;
-
-    void set_value(num v)
-    {
-        this->value = v;
-    };
-
-    num number()
-    {
-        return this->value;
-    };
-
-    char* name()
-    {
-        return this->sname;
-    }
-
-    static num get_ball_index(sty style)
-    {
-        struct timeval now;
-        num index = NUM_NOT;
-
-        gettimeofday(&now, NULL);
-        usleep(now.tv_usec);
-
-        switch (style)
-        {
-        case STYLE_CR:
-            index = now.tv_sec % now.tv_usec % sizeof(red_numbers);
-            break;
-        case STYLE_CB:
-            index = now.tv_sec % now.tv_usec % sizeof(blue_numbers);
-            break;
-        case STYLE_DF:
-            index = now.tv_sec % now.tv_usec % sizeof(front_numbers);
-            break;
-        case STYLE_DB:
-            index = now.tv_sec % now.tv_usec % sizeof(back_numbers);
-            break;
-        default:
-            break;
-        }
-
-        return index;
-    };
-};
-#endif
-
 class bet
 {
 public:
