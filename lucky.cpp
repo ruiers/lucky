@@ -4,6 +4,7 @@
 #include "sys/time.h"
 #include "lucky.h"
 
+#if 0
 class ball
 {
 public:
@@ -55,14 +56,15 @@ public:
         return index;
     };
 };
+#endif
 
 class bet
 {
 public:
-    class ball *red;
-    class ball *blue;
-    class ball *front;
-    class ball *back;
+    num red[6];
+    num blue[1];
+    num front[5];
+    num back[2];
 
     static num get_index(num sum)
     {
@@ -77,171 +79,96 @@ public:
         return index;
     };
 
+    void init(num *arr, num len)
+    {
+        num i = 0;
+        for (i = 0; i < len; i++)
+            arr[i] = 0;
+    }
+
     bet()
     {
-        red = new ball[dc_bet[0]];
-        blue = new ball[dc_bet[1]];
-
-        front = new ball[da_bet[0]];
-        back = new ball[da_bet[1]];
+        init(red, sizeof(red));
+        init(blue, sizeof(blue));
+        init(front, sizeof(front));
+        init(back, sizeof(back));
     }
 
-    ~bet()
+
+    void bet_common(num *arr, num len, num max)
     {
-        delete[] red;
-        delete[] blue;
-        delete[] front;
-        delete[] back;
-    }
+        num i = 0, j = 0;
+        class number *pool = new number();
 
-    void dc_red()
-    {
-        num i = 0, j = 0, n = dc_bet[0];
-        class number *red_pool = new number();
+        for (i = max; i > 0; i--)
+            pool->add(i);
 
-        for (i = RED_NUM_MAX; i >= RED_NUM_MIN; i--)
-            red_pool->add(i);
-
-        for (i = 0; i < n; i++)
+        for (i = 0; i < len; i++)
         {
-            j = this->get_index(RED_NUM_MAX - i);
+            j = this->get_index(max - i);
 
-            red[i].set_value(red_pool->cir(j));
+            arr[i] = pool->cir(j);
 
-            red_pool->del(red[i].number());
+            pool->del(arr[i]);
         }
 
-        delete red_pool;
-    };
+        delete pool;
 
-    void dc_blue()
-    {
-        num i = 0, j = 0, n = dc_bet[1];
-        class number *blue_pool = new number();
-
-        for (i = BLUE_NUM_MAX; i >= BLUE_NUM_MIN; i--)
-            blue_pool->add(i);
-
-        for (i = 0; i < n; i++)
-        {
-            j = this->get_index(BLUE_NUM_MAX - i);
-
-            blue[i].set_value(blue_pool->cir(j));
-
-            blue_pool->del(blue[i].number());
-        }
-
-        delete blue_pool;
+        qsort(arr, len, sizeof(char), cmp);
     };
 
     void dc()
     {
-        dc_red();
-        dc_blue();
+        init(red, sizeof(red));
+        init(blue, sizeof(blue));
 
+        bet_common(red, sizeof(red), RED_NUM_MAX);
+        bet_common(blue, sizeof(blue), BLUE_NUM_MAX);
         num i = 0;
 
         printf("[ ");
         for (i = 0; i < dc_bet[0]; i++)
         {
-            printf("%2d ", red[i].number());
+            printf("%2d ", red[i]);
         }
 
         printf("] | [");
 
         for (i = 0; i < dc_bet[1]; i++)
         {
-            printf("%2d ", blue[i].number());
+            printf("%2d ", blue[i]);
         }
 
         printf(" ]\n");
     };
 
-    void da_front()
-    {
-        num i = 0, j = 0, n = da_bet[0];
-        class number *front_pool = new number();
-
-        for (i = FRONT_NUM_MAX; i >= FRONT_NUM_MIN; i--)
-            front_pool->add(i);
-
-        for (i = 0; i < n; i++)
-        {
-            j = this->get_index(FRONT_NUM_MAX - i);
-
-            front[i].set_value(front_pool->cir(j));
-
-            front_pool->del(front[i].number());
-        }
-
-        delete front_pool;
-    };
-
-    void da_back()
-    {
-        num i = 0, j = 0, n = da_bet[1];
-        class number *back_pool = new number();
-
-        for (i = BACK_NUM_MAX; i >= BACK_NUM_MIN; i--)
-            back_pool->add(i);
-
-        for (i = 0; i < n; i++)
-        {
-            j = this->get_index(BACK_NUM_MAX - i);
-
-            back[i].set_value(back_pool->cir(j));
-
-            back_pool->del(back[i].number());
-        }
-
-        delete back_pool;
-    };
 
     void da()
     {
-        da_front();
-        da_back();
+        init(front, sizeof(front));
+        init(back, sizeof(back));
 
+        bet_common(front, sizeof(front), FRONT_NUM_MAX);
+        bet_common(back, sizeof(back), BACK_NUM_MAX);
         num i = 0;
 
         printf("[ ");
 
         for (i = 0; i < da_bet[0]; i++)
         {
-            printf("%2d ", front[i].number());
+            printf("%2d ", front[i]);
         }
 
         printf("]| [");
 
         for (i = 0; i < da_bet[1]; i++)
         {
-            printf("%2d ", back[i].number());
+            printf("%2d ", back[i]);
         }
 
         printf("]\n");
     };
 };
-
-int test(int argc, char** argv)
-{
-    int i = 0;
-
-    for (i = 0; i < 6; i++)
-    {
-        printf("%2d ", red_numbers[ball::get_ball_index(STYLE_CR)]);
-    }
-
-    printf(" + %2d \n", blue_numbers[ball::get_ball_index(STYLE_CB)]);
-
-    for (i = 0; i < 5; i++)
-    {
-        printf("%2d ", front_numbers[ball::get_ball_index(STYLE_DF)]);
-    }
-
-    printf(" + %2d %2d\n", back_numbers[ball::get_ball_index(STYLE_DB)],
-           back_numbers[ball::get_ball_index(STYLE_DB)]);
-    return 0;
-}
 
 #include <mcheck.h>
 int main()

@@ -50,8 +50,8 @@ enum double_style
 static str colors[] = {"null", "red", "blue"};
 static str areas[] = {"null", "front", "back"};
 
-const num dc_bet[] = {6, 1};
-const num da_bet[] = {5, 2};
+const int dc_bet[] = {6, 1};
+const int da_bet[] = {5, 2};
 
 static num red_numbers[] = { 1,  2,  3,  4 , 5,  6,  7,  8,  9, 10,
                              11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -73,7 +73,7 @@ static num back_numbers[] = { 1,  2,  3,  4 , 5,  6,  7,  8,  9, 10,
                               11, 12
                             };
 
-static num cmp(const void *a, const void *b)
+int cmp(const void *a, const void *b)
 {
     return *((num *) a) - *((num *) b);
 }
