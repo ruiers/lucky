@@ -4,13 +4,23 @@
 #include "sys/time.h"
 #include "lucky.h"
 
+typedef struct dc_win
+{
+    num red[6];
+    num blue[1];
+} dc_num;
+
+typedef struct da_win
+{
+    num front[5];
+    num back[2];
+} da_num;
+
 class bet
 {
 public:
-    num red[6];
-    num blue[1];
-    num front[5];
-    num back[2];
+    dc_num rdc;
+    da_num rda;
 
     static num get_index(num sum)
     {
@@ -34,10 +44,10 @@ public:
 
     bet()
     {
-        init(red, sizeof(red));
-        init(blue, sizeof(blue));
-        init(front, sizeof(front));
-        init(back, sizeof(back));
+        init(rdc.red, sizeof(rdc.red));
+        init(rdc.blue, sizeof(rdc.blue));
+        init(rda.front, sizeof(rda.front));
+        init(rda.back, sizeof(rda.back));
     }
 
 
@@ -65,24 +75,24 @@ public:
 
     void dc()
     {
-        init(red, sizeof(red));
-        init(blue, sizeof(blue));
+        init(rdc.red, sizeof(rdc.red));
+        init(rdc.blue, sizeof(rdc.blue));
 
-        bet_common(red, sizeof(red), RED_NUM_MAX);
-        bet_common(blue, sizeof(blue), BLUE_NUM_MAX);
+        bet_common(rdc.red, sizeof(rdc.red), RED_NUM_MAX);
+        bet_common(rdc.blue, sizeof(rdc.blue), BLUE_NUM_MAX);
         num i = 0;
 
         printf("[ ");
         for (i = 0; i < dc_bet[0]; i++)
         {
-            printf("%2d ", red[i]);
+            printf("%2d ", rdc.red[i]);
         }
 
         printf("] | [");
 
         for (i = 0; i < dc_bet[1]; i++)
         {
-            printf("%2d ", blue[i]);
+            printf("%2d ", rdc.blue[i]);
         }
 
         printf(" ]\n");
@@ -91,31 +101,32 @@ public:
 
     void da()
     {
-        init(front, sizeof(front));
-        init(back, sizeof(back));
+        init(rda.front, sizeof(rda.front));
+        init(rda.back, sizeof(rda.back));
 
-        bet_common(front, sizeof(front), FRONT_NUM_MAX);
-        bet_common(back, sizeof(back), BACK_NUM_MAX);
+        bet_common(rda.front, sizeof(rda.front), FRONT_NUM_MAX);
+        bet_common(rda.back, sizeof(rda.back), BACK_NUM_MAX);
         num i = 0;
 
         printf("[ ");
 
         for (i = 0; i < da_bet[0]; i++)
         {
-            printf("%2d ", front[i]);
+            printf("%2d ", rda.front[i]);
         }
 
         printf("]| [");
 
         for (i = 0; i < da_bet[1]; i++)
         {
-            printf("%2d ", back[i]);
+            printf("%2d ", rda.back[i]);
         }
 
         printf("]\n");
     };
 };
 
+char* version = "This is first test version";
 #include <mcheck.h>
 int main()
 {
@@ -124,5 +135,7 @@ int main()
 
     one_bet.dc();
     one_bet.da();
+
+    puts(version);
     return 0;
 }

@@ -8,7 +8,7 @@
 #define BLUE_NUM_MAX 16
 #define BLUE_NUM_MIN 1
 
-#define FRONT_NUM_MAX 15
+#define FRONT_NUM_MAX 35
 #define FRONT_NUM_MIN 1
 
 #define BACK_NUM_MAX 12
